@@ -11,6 +11,12 @@
     <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap-datepicker.css">
 
     <div class="row">
+        <div class="col-md-4">Meeting Title : </div>
+        <div class="col-md-8">
+            <input type="text" class="form-control" placeholder="Meeting Title" asp-for="Message" autocomplete="off" />
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-4">Emplyee List : </div>
         <div class="col-md-8">
             @Html.HiddenFor(model => model.EmployeeId1)
@@ -18,6 +24,7 @@
             @Html.DropDownList("EmployeeId2", ViewBag.Emp as SelectList, "Select Employee", new { @class = "form-control col-md-12", @id = "ddlEmployee", @required = true })
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-4">Slot : </div>
         <div class="col-md-8">

@@ -53,6 +53,7 @@ namespace Test_Web_Application.Controllers
                 dtoEmp.MeetingDate = dt.Date;
                 var empList = _employeeRepository.GetAllEmployees().Where(s => s.EmployeeId != dtoEmp.EmployeeId1).ToList();
                 ViewBag.Emp = new SelectList(empList, "EmployeeId", "FirstName");
+                dtoEmp.CreatedOn = DateTime.Now;
                 _employeeSlotsRepository.SaveEmployeeSlots(dtoEmp);
             }
             return RedirectToAction("Index");
