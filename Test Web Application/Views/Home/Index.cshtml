@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Test_Web_Application.Code.Employee>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<section id="main-container">
+    <div class="container-fluid py-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading panel-head">All Employees </div>
+            <div class="panel-body">
+                <div class="btn-group">
+                    <div class="top-buffer"></div>
+                    <table class="table table-bordered table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
+                                <th>Meeting</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.MiddleName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                                    <td>
+                                        @{
+                                            if (item.employeeSlots.Count > 0)
+                                            {
+                                                <a class="btn btn-info" style="color: #fff !important; background-color: #b8a117 !important; border-color: #b8ad17 !important;"> <i class="glyphicon glyphicon-pencil"></i> In Meeting </a>
+
+                                                <div>Availbe After @item.employeeSlots.First().MeetingFromTime To @item.employeeSlots.First().MeetingToTime </div>
+                                            }
+                                            else
+                                            {
+                                                <a id="editStudentModal" data-toggle="modal" data-bs-toggle="modal" data-bs-target="#editModal" onclick="LoadDropd(@item.EmployeeId)" class="btn btn-info"> <i class="glyphicon glyphicon-pencil"></i> Book a Meeting </a>
+                                            }
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Modals Section Starts -->
+<section>
+    <!-- Edit Modal Starts -->
+    <div class="modal fade actionModal editModal" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-valhalla ">
+                    <h5 class="modal-title" id="editModalLabel">
+                        <span class="header-icon"><i class="fas fa-edit"></i></span> Book A Meeting
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="book">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Modal Ends -->
+
+</section>
+
+<div class="top-buffer"></div>
+<script>
+    function LoadDropd(id)
+    {
+        $.get("@Url.Action("BookMeeting", "Home")/" + id,
+            function (data) { $('#book').html(data); })
+
+    }
+
+
+</script>

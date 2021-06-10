@@ -1,0 +1,136 @@
+﻿
+@model Test_Web_Application.Code.EmployeeSlots
+
+<form asp-action="BookMeeting" asp-controller="Home" method="post" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="~/assets/js/jquery.timepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/assets/css/jquery.timepicker.css">
+    <script type="text/javascript" src="~/assets/js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap-datepicker.css">
+
+    <div class="row">
+        <div class="col-md-4">Emplyee List : </div>
+        <div class="col-md-8">
+            @Html.HiddenFor(model => model.EmployeeId1)
+            <input type="text" class="form-control date start" id="actualoccupiedtimes" value="@ViewBag.rangeData" />
+            @Html.DropDownList("EmployeeId2", ViewBag.Emp as SelectList, "Select Employee", new { @class = "form-control col-md-12", @id = "ddlEmployee", onchange = "return GetCities()" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Slot : </div>
+        <div class="col-md-8">
+            <p id="datepairExample">
+                <input type="text" class="form-control date start" placeholder="Choose Start Date" asp-for="Meeting_Date" autocomplete="off" />
+                <input type="text" class="form-control time start" placeholder="Choose Start Time" asp-for="Meeting_FromTime" autocomplete="off" /> to
+                <input type="text" class="form-control time end" placeholder="Choose End Time" asp-for="Meeting_ToTime" autocomplete="off" />
+                <input type="text" class="form-control date end" placeholder="Choose End Date" readonly="readonly" style="display:none;" autocomplete="off" />
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-success relative" id="btnSubmit" type="submit">
+            <i class="loader"></i>
+            Submit
+        </button>
+    </div>
+    <script src="~/assets/js/datepair.js"></script>
+    <script src="~/assets/js/jquery.datepair.js"></script>
+    <script>
+        var timeRangesToDisable = [['4am', '5am']];
+     //   alert(timeRangesToDisable);
+      //  console.log(timeRangesToDisable);
+        //var actualOccupiedTimes = $("#actualoccupiedtimes").val();
+        //var dtr = [];
+        //var res = actualOccupiedTimes.split("-");
+        //var x = new Array(res.length);
+        //for (var i = 0; i < res.length; i++) {
+        //    x[i] = new Array(2);
+        //    x[i][0] = res[i].split(",")[0];
+        //    x[i][1] = res[i].split(",")[1];
+        //    timeRangesToDisable.push(x[i]);
+        //}
+        ////alert(timeRangesToDisable);
+        console.log(timeRangesToDisable);
+
+        var tim = $('#datepairExample .time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'g:i a'
+            , 'disableTimeRanges': timeRangesToDisable
+        });
+        $('#datepairExample .date').datepicker({
+            'format': 'dd-MM-yyyy',
+            'autoclose': true
+        });
+
+        // initialize datepair
+        $('#datepairExample').datepair();
+        $('#datepairExample .date').on('changeDate', function () {
+            timeRangesToDisable = [['5am', '6am']];
+            //alert($(this).val());
+            //alert(timeRangesToDisable);
+            ////['3am','4:01am']
+            //x = new Array(2);
+            //x[0] = '4am';
+            //x[1] = '5am';
+            //timeRangesToDisable.push(x);
+           // tim.disableTimeRanges = timeRangesToDisable;
+
+
+
+
+            var drpvalue = document.getElementById("ddlEmployee").value;
+            if (drpvalue == 0) {
+                return false;
+            }
+
+            $.get("@Url.Action("GetEmployeeSlot", "Home")?empId=" + drpvalue + "&dt=" + $("#Meeting_Date").val(), function (data) { alert(data); })
+
+              @*$.ajax({
+                url: '@Url.Action("GetEmployeeSlot", "Home")',
+                dataType: "html",
+                data: { "empId": drpvalue, "dt": $("#Meeting_Date").val()},
+                type: "GET",
+                contentType: "application/json",
+                success: function (response) {
+                    console.log(response);
+                    //$('#datepairExample').datepair();
+                    //var tim1 = $('#datepairExample .time').timepicker('update');
+                    var timeRangesToDisable1 = [];// [['0am', '0am']];
+                    var res1 = response.split("-");
+                    var x = new Array(res1.length);
+                    var y = new Array(2);
+                    y[0] = '4am';
+                    y[1] = '5am';
+                    //timeRangesToDisable1.push(y);
+                    for (var i = 0; i < res1.length; i++) {
+                        x[i] = new Array(2);
+                        x[i][0] = parseInt( res1[i].split(",")[0]);
+                        x[i][1] = parseInt(res1[i].split(",")[1]);
+                        timeRangesToDisable1.push(x[i]);
+                      //  alert(x[i]);
+                    }
+                    console.log(tim.disableTimeRanges);
+                    tim.disableTimeRanges = timeRangesToDisable1;
+                    console.log(tim.disableTimeRanges);
+                },
+                error: function (err) {
+                    alert(err.responseText);
+                }
+            });*@
+
+           // tim.disableTimeRanges = timeRangesToDisable;
+            //$('#datepairExample .time').timepicker({
+            //    'disableTimeRanges':
+            //});
+
+        });
+        console.log(tim.disableTimeRanges);
+        function GetCities() {
+
+
+        }
+
+    </script>
+</form>      
